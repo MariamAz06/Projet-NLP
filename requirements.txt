@@ -1,0 +1,53 @@
+# Dépendances pour le projet de dataset de news sur les maladies animales
+
+# ==================== EXTRACTION AUTOMATISÉE (OBLIGATOIRE) ====================
+pandas>=2.1.0
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+trafilatura>=1.6.0
+langdetect>=1.0.9
+lxml>=4.9.0
+
+# ==================== IA / LLM (CHOISIR UNE OPTION) ====================
+# Option 1 : Ollama (LLM Local - Gratuit) - RECOMMANDÉ
+# Pas besoin de package Python, installer Ollama depuis https://ollama.ai
+# Puis : ollama pull llama2
+
+# Option 2 : Groq API (Cloud - Gratuit et Rapide)
+groq>=0.4.0
+
+# Option 3 : Google Gemini API (Cloud - Gratuit)
+# google-generativeai>=0.3.0
+
+# ==================== WEB SCRAPING AVANCÉ (OPTIONNEL) ====================
+# selenium>=4.15.0
+# webdriver-manager>=4.0.0
+# readability-lxml>=0.8.1
+
+# ==================== NLP (POUR ÉTAPES SUIVANTES) ====================
+# spacy>=3.7.0
+# nltk>=3.8.0
+# sumy>=0.11.0
+
+# ==================== TRANSFORMERS (POUR RÉSUMÉS AVANCÉS) ====================
+transformers>=4.35.0
+torch>=2.1.0
+sentencepiece>=0.1.99
+
+# ==================== DASHBOARD (POUR ÉTAPE 6) ====================
+# streamlit>=1.28.0
+# plotly>=5.17.0
+# wordcloud>=1.9.2
+
+# ==================== UTILITAIRES ====================
+# numpy>=1.24.0
+python-dateutil>=2.8.2
+htmldate>=1.6.0
+dateparser>=1.2.0
+
+
+
+
+
+
+
