@@ -4,7 +4,6 @@ from tqdm import tqdm
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import time
 import re
-from functools import wraps
 
 # ==============================
 # Ollama config
@@ -15,27 +14,6 @@ MODEL = "mistral:7b-instruct"  # Modèle optimisé pour l'arabe et meilleure qua
 
 session = requests.Session()
 MAX_WORKERS = 6  # Parallélisation : 6 threads simultanés
-
-# ==============================
-# Retry decorator
-# ==============================
-
-def llm_retry_decorator(max_retries=3, delay=1):
-    """Décorateur pour réessayer les appels LLM en cas d'échec"""
-    def decorator(func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            for attempt in range(max_retries):
-                try:
-                    return func(*args, **kwargs)
-                except Exception as e:
-                    if attempt == max_retries - 1:
-                        # Dernière tentative échouée
-                        return ""
-                    time.sleep(delay * (attempt + 1))  # Backoff exponentiel
-            return ""
-        return wrapper
-    return decorator
 
 # ==============================
 # Prompt factory

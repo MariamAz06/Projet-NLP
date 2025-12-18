@@ -67,11 +67,6 @@ class NewsExtractor:
     # SECTION 2: NETTOYAGE ET VALIDATION DU CONTENU
     # ============================================================================
         
-    def clean_content(self, contenu):
-        """Nettoie le contenu des éléments non pertinents"""
-        # Utiliser la fonction depuis utils.py
-        return clean_content(contenu)
-    
     def validate_content_coherence(self, titre, contenu):
         """Valide que le contenu est cohérent avec le titre et logiquement correct"""
         # Utiliser la fonction de base depuis utils.py
@@ -267,7 +262,7 @@ class NewsExtractor:
                     titre = metadata.title if metadata and metadata.title else ""
                     
                     # Nettoyer et valider le contenu
-                    contenu_cleaned = self.clean_content(extracted.strip())
+                    contenu_cleaned = clean_content(extracted.strip())
                     
                     # Garder le texte original en arabe
                     titre_original = titre
@@ -329,21 +324,21 @@ class NewsExtractor:
                     # Si 403, essayer avec des headers encore plus complets
                     print(f"  [ATTENTION] Erreur 403, tentative avec headers alternatifs...")
                     try:
-                       headers_alt = {
-                        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-                        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                        'Accept-Language': 'en-US,en;q=0.5',
-                        'Referer': 'https://www.google.com/',
-                        'DNT': '1',
-                        'Connection': 'keep-alive'
-                         }
+                        headers_alt = {
+                            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                            'Accept-Language': 'en-US,en;q=0.5',
+                            'Referer': 'https://www.google.com/',
+                            'DNT': '1',
+                            'Connection': 'keep-alive'
+                        }
                         
-                      response = requests.get(url, timeout=15, headers=headers_alt, allow_redirects=True)
-                      response.raise_for_status()
+                        response = requests.get(url, timeout=15, headers=headers_alt, allow_redirects=True)
+                        response.raise_for_status()
                     except requests.exceptions.HTTPError:
                         # Si ça échoue encore, retourner une erreur propre
-                           error_msg = f"{status_code} Client Error: {e.response.reason if e.response else 'Forbidden'} for url: {url}"
-                    raise requests.exceptions.HTTPError(error_msg, response=e.response)
+                        error_msg = f"{status_code} Client Error: {e.response.reason if e.response else 'Forbidden'} for url: {url}"
+                        raise requests.exceptions.HTTPError(error_msg, response=e.response)
                 elif status_code == 404:
                     # Erreur 404 - page non trouvée
                     error_msg = f"404 Client Error: Not Found for url: {url}"
@@ -427,7 +422,7 @@ class NewsExtractor:
                     contenu = body.get_text(separator=' ', strip=True)
             
             # Nettoyer et valider le contenu
-            contenu_cleaned = self.clean_content(contenu)
+            contenu_cleaned = clean_content(contenu)
             
             # Garder le texte original en arabe
             titre_original = titre
@@ -559,16 +554,7 @@ class NewsExtractor:
             return "unknown"
     
     # ============================================================================
-    # SECTION 4: CALCULS ET STATISTIQUES
-    # ============================================================================
-    
-    def calculate_stats(self, text):
-        """Calcule le nombre de caractères et de mots"""
-        # Utiliser la fonction depuis utils.py
-        return calculate_stats(text)
-    
-    # ============================================================================
-    # SECTION 5: EXTRACTION DE DATES
+    # SECTION 4: EXTRACTION DE DATES
     # ============================================================================
     
     def extract_date(self, url, html_content=None, text=None, metadata=None):
@@ -2787,7 +2773,7 @@ class NewsExtractor:
                             validated_lieu = lieu_alt
                             issues.append(f"  -> Remplace par '{lieu_alt}' trouve dans le contenu")
                     else:
-                    confirmations.append(f"✓ Lieu '{lieu}' EXISTE (extrait depuis les metadonnees) et est CORRECT")
+                        confirmations.append(f"✓ Lieu '{lieu}' EXISTE (extrait depuis les metadonnees) et est CORRECT")
         
         return validated_maladie, validated_lieu, issues, confirmations
     
@@ -3176,7 +3162,7 @@ class NewsExtractor:
         
         # Calculer les statistiques du contenu nettoyé (texte original)
         # GARANTIR que les statistiques sont toujours calculées
-        stats = self.calculate_stats(contenu)
+        stats = calculate_stats(contenu)
         if not stats:
             stats = {"caracteres": 0, "mots": 0}
         print(f"[{code}] Caracteres: {stats['caracteres']}, Mots: {stats['mots']}")
@@ -4136,8 +4122,6 @@ def main():
                 # Vérifier que le modèle est installé
                 models = response.json().get("models", [])
                 model_names = [m.get("name", "") for m in models]
-                # Vérifier aussi avec ":latest" ajouté
-                model_names_with_latest = model_names + [f"{m}:latest" for m in model_names if ":latest" not in m]
                 
                 # Vérifier si le modèle est installé (avec ou sans :latest)
                 model_found = False
@@ -4523,4 +4507,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

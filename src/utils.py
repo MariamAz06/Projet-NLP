@@ -103,8 +103,3 @@ def validate_content_coherence(titre, contenu):
 
 
 
-
-
-
-
-
